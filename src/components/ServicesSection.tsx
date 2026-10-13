@@ -40,32 +40,57 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     };
   }, []);
 
-  // Scroll listener for sticky 3D cylinder arc
+  // Scroll listener for sticky 3D cylinder arc with RAF throttling
   useEffect(() => {
     if (isMobile) return;
 
-    const handleScroll = () => {
+    let rafId: number | null = null;
+    let lastProgress = -1;
+    let lastActiveIndex = -1;
+
+    const updateScroll = () => {
+      rafId = null;
       if (!containerRef.current || isAutoScrollingRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const totalScrollableDistance = rect.height - window.innerHeight;
 
+      // If completely offscreen, don't execute or re-render
+      if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
+
+      const totalScrollableDistance = rect.height - window.innerHeight;
       if (totalScrollableDistance <= 0) return;
 
       const currentScroll = -rect.top;
       const rawProgress = Math.min(Math.max(currentScroll / totalScrollableDistance, 0), 1);
-      setScrollProgress(rawProgress);
+
+      // Only update progress state if changed by >= 0.002 to avoid micro-renders
+      if (Math.abs(rawProgress - lastProgress) >= 0.002) {
+        lastProgress = rawProgress;
+        setScrollProgress(rawProgress);
+      }
 
       // Exact mathematical synchronization: item closest to horizontal center is active
       const targetIndex = Math.min(
         Math.max(Math.round(rawProgress * (totalItems - 1)), 0),
         totalItems - 1
       );
-      setActiveIndex(targetIndex);
+      if (targetIndex !== lastActiveIndex) {
+        lastActiveIndex = targetIndex;
+        setActiveIndex(targetIndex);
+      }
+    };
+
+    const handleScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateScroll);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    updateScroll();
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [isMobile, totalItems]);
 
   // Jump to specific capability by index with auto-scroll lock
@@ -82,7 +107,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       const rect = containerRef.current.getBoundingClientRect();
       const totalScrollable = rect.height - window.innerHeight;
       const targetScrollTop = window.scrollY + rect.top + (index / (totalItems - 1)) * totalScrollable;
-      window.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: object) => void } }).__lenis;
+      if (lenis) {
+        lenis.scrollTo(targetScrollTop, { duration: 0.9 });
+      } else {
+        window.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      }
     }
 
     // Release auto-scrolling lock after smooth scroll animation settles
@@ -103,9 +133,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     <section
       id="services"
       ref={containerRef}
-      className={`relative bg-[#FFFFFF] text-[#171717] border-b border-[#E8E8E8] selection:bg-[#353788] selection:text-white ${
-        isMobile ? 'py-12' : 'h-[270vh]'
-      }`}
+      className={`relative bg-[#FFFFFF] text-[#171717] border-b border-[#E8E8E8] selection:bg-[#353788] selection:text-white ${isMobile ? 'py-12' : 'h-[270vh]'
+        }`}
     >
       {/* Subtle Atmospheric Gradient Aura */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -116,11 +145,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
 
       {/* Sticky Viewport Container */}
       <div
-        className={`${
-          isMobile
+        className={`${isMobile
             ? 'relative max-w-7xl mx-auto px-6'
             : 'sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-8 px-6 md:px-12 lg:px-16 xl:px-20 z-10'
-        }`}
+          }`}
       >
         {/* Compact, Professional Header */}
         <div className="max-w-7xl w-full mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#E8E8E8] shrink-0">
@@ -200,22 +228,20 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     >
                       {/* Number Tag */}
                       <span
-                        className={`text-xs font-mono tracking-wider transition-colors duration-300 ${
-                          isActive
+                        className={`text-xs font-mono tracking-wider transition-colors duration-300 ${isActive
                             ? 'text-[#353788] font-bold'
                             : 'text-[#A3A3A3] group-hover:text-[#353788]'
-                        }`}
+                          }`}
                       >
                         0{index + 1}
                       </span>
 
                       {/* Title - Refined Professional Size */}
                       <span
-                        className={`text-lg sm:text-xl xl:text-2xl font-bold tracking-tight transition-all duration-300 truncate ${
-                          isActive
+                        className={`text-lg sm:text-xl xl:text-2xl font-bold tracking-tight transition-all duration-300 truncate ${isActive
                             ? 'text-[#171717] font-extrabold drop-shadow-[0_2px_12px_rgba(53,55,136,0.12)]'
                             : 'text-[#737373]/65 group-hover:text-[#171717]'
-                        }`}
+                          }`}
                       >
                         {service.title}
                       </span>
@@ -277,7 +303,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     />
                   </AnimatePresence>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none z-10" />
-                  
+
                   {/* Synchronized Header Badges */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-20">
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E8E8E8] text-[10.5px] font-semibold text-[#353788] shadow-xs">
@@ -341,8 +367,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                       <button
                         onClick={() => {
                           onSelectServiceForContact?.(activeService.title);
-                          const el = document.getElementById('contact');
-                          el?.scrollIntoView({ behavior: 'smooth' });
+                          const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts?: object) => void } }).__lenis;
+                          if (lenis) {
+                            lenis.scrollTo('#contact', { duration: 1.2 });
+                          } else {
+                            const el = document.getElementById('contact');
+                            el?.scrollIntoView({ behavior: 'smooth' });
+                          }
                         }}
                         className="w-full py-3 sm:py-3.5 rounded-full bg-[#171717] hover:bg-[#353788] text-white text-xs sm:text-[12.5px] font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer"
                       >
@@ -366,11 +397,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 <button
                   key={srv.id}
                   onClick={() => setActiveIndex(idx)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                    idx === activeIndex
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${idx === activeIndex
                       ? 'bg-[#353788] text-white font-bold shadow-xs'
                       : 'bg-[#F7F7F5] text-[#737373] border border-[#E8E8E8] hover:text-[#171717]'
-                  }`}
+                    }`}
                 >
                   0{idx + 1} &bull; {srv.title}
                 </button>
@@ -386,7 +416,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                
+
                 {/* Synchronized Header Badges */}
                 <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                   <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E8E8E8] text-[10px] font-semibold text-[#353788] shadow-xs">
@@ -424,8 +454,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               <button
                 onClick={() => {
                   onSelectServiceForContact?.(activeService.title);
-                  const el = document.getElementById('contact');
-                  el?.scrollIntoView({ behavior: 'smooth' });
+                  const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts?: object) => void } }).__lenis;
+                  if (lenis) {
+                    lenis.scrollTo('#contact', { duration: 1.2 });
+                  } else {
+                    const el = document.getElementById('contact');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }}
                 className="w-full py-3 rounded-full bg-[#171717] hover:bg-[#353788] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
@@ -447,11 +482,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 key={i}
                 onClick={() => jumpToIndex(i)}
                 aria-label={`Jump to capability ${i + 1}`}
-                className={`transition-all duration-300 rounded-full cursor-pointer ${
-                  i === activeIndex
+                className={`transition-all duration-300 rounded-full cursor-pointer ${i === activeIndex
                     ? 'w-7 h-1.5 bg-[#353788]'
                     : 'w-1.5 h-1.5 bg-[#D4D4D4] hover:bg-[#353788]/60'
-                }`}
+                  }`}
               />
             ))}
           </div>

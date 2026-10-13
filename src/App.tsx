@@ -30,6 +30,9 @@ export function App() {
       touchMultiplier: 1.5,
     });
 
+    // Expose lenis globally for seamless scroll coordination
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
     let animationFrameId: number;
 
     function raf(time: number) {
@@ -41,6 +44,7 @@ export function App() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
       lenis.destroy();
     };
   }, []);
@@ -54,7 +58,12 @@ export function App() {
   const handleOpenConsultation = () => {
     const contactElement = document.getElementById('contact');
     if (contactElement) {
-      contactElement.scrollIntoView({ behavior: 'smooth' });
+      const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+      if (lenis) {
+        lenis.scrollTo(contactElement, { duration: 1.2 });
+      } else {
+        contactElement.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

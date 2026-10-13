@@ -486,17 +486,26 @@ const Partner3DCard: React.FC<PartnerCardProps> = ({ acc, onCursorChange }) => {
 
 export const WhyUsPillars: React.FC<WhyUsPillarsProps> = ({ onCursorChange }) => {
   const gridContainerRef = useRef<HTMLDivElement>(null);
+  const mousePendingRef = useRef(false);
 
-  // Mouse-tracking spotlight coordinates across the grid container
+  // Mouse-tracking spotlight coordinates across the grid container with RAF throttling
   const handleGridMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!gridContainerRef.current) return;
-    const cards = gridContainerRef.current.querySelectorAll<HTMLDivElement>('.pillar-card-wrapper');
-    cards.forEach((card) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+    if (!gridContainerRef.current || mousePendingRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    mousePendingRef.current = true;
+
+    requestAnimationFrame(() => {
+      mousePendingRef.current = false;
+      if (!gridContainerRef.current) return;
+      const cards = gridContainerRef.current.querySelectorAll<HTMLDivElement>('.pillar-card-wrapper');
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
     });
   };
 

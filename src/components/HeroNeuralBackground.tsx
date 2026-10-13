@@ -342,6 +342,7 @@ export const HeroNeuralBackground: React.FC<HeroNeuralBackgroundProps> = ({
       const linePos = linePositions;
       const lineCol = lineColors;
       const maxConnectDist = 1.35;
+      const maxConnectDistSq = maxConnectDist * maxConnectDist;
 
       for (let i = 0; i < PARTICLE_COUNT && lineVertexIdx < MAX_LINES * 6; i++) {
         const i3 = i * 3;
@@ -350,9 +351,11 @@ export const HeroNeuralBackground: React.FC<HeroNeuralBackgroundProps> = ({
           const dx = cur[i3] - cur[j3];
           const dy = cur[i3 + 1] - cur[j3 + 1];
           const dz = cur[i3 + 2] - cur[j3 + 2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          const distSq = dx * dx + dy * dy + dz * dz;
 
-          if (dist < maxConnectDist) {
+          // Fast squared distance rejection before expensive Math.sqrt
+          if (distSq < maxConnectDistSq) {
+            const dist = Math.sqrt(distSq);
             const alpha = 1.0 - dist / maxConnectDist;
             const lineAlpha = Math.max(0.32, alpha);
 
@@ -388,27 +391,54 @@ export const HeroNeuralBackground: React.FC<HeroNeuralBackgroundProps> = ({
       lineColAttr.needsUpdate = true;
 
       renderer.render(scene, camera);
-      s.rafId = requestAnimationFrame(animate);
+
+      if (isVisible) {
+        s.rafId = requestAnimationFrame(animate);
+      } else {
+        s.rafId = undefined;
+      }
     };
+
+    // Visibility Observer to sleep Three.js loop when scrolled offscreen
+    let isVisible = true;
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isVisible = entry.isIntersecting;
+        if (isVisible && !sceneState.current.rafId) {
+          sceneState.current.rafId = requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0 }
+    );
+    if (container) {
+      visibilityObserver.observe(container);
+    }
 
     sceneState.current.rafId = requestAnimationFrame(animate);
 
-    // 5. Window Pointer Tracking across Hero Viewport
+    // 5. Window Pointer Tracking across Hero Viewport with RAF Throttling
+    let mousePending = false;
     const handleWindowPointerMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      // Smoothly track mouse as long as hero section is in view
-      if (rect.bottom > 0 && rect.top < window.innerHeight) {
-        const xPct = Math.max(-1.3, Math.min(1.3, ((e.clientX - rect.left) / rect.width) * 2 - 1));
-        const yPct = Math.max(-1.3, Math.min(1.3, -(((e.clientY - rect.top) / rect.height) * 2 - 1)));
-        sceneState.current.mouse.targetX = xPct;
-        sceneState.current.mouse.targetY = yPct;
-        sceneState.current.mouse.active = true;
-      } else {
-        sceneState.current.mouse.active = false;
-        sceneState.current.mouse.targetX = 0;
-        sceneState.current.mouse.targetY = 0;
-      }
+      if (!isVisible || !containerRef.current || mousePending) return;
+      mousePending = true;
+
+      requestAnimationFrame(() => {
+        mousePending = false;
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const xPct = Math.max(-1.3, Math.min(1.3, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+          const yPct = Math.max(-1.3, Math.min(1.3, -(((e.clientY - rect.top) / rect.height) * 2 - 1)));
+          sceneState.current.mouse.targetX = xPct;
+          sceneState.current.mouse.targetY = yPct;
+          sceneState.current.mouse.active = true;
+        } else {
+          sceneState.current.mouse.active = false;
+          sceneState.current.mouse.targetX = 0;
+          sceneState.current.mouse.targetY = 0;
+        }
+      });
     };
 
     window.addEventListener('mousemove', handleWindowPointerMove, { passive: true });
@@ -432,6 +462,7 @@ export const HeroNeuralBackground: React.FC<HeroNeuralBackgroundProps> = ({
 
     const stateObj = sceneState.current;
     return () => {
+      visibilityObserver.disconnect();
       window.removeEventListener('mousemove', handleWindowPointerMove);
       resizeObserver.disconnect();
       if (stateObj.rafId) {

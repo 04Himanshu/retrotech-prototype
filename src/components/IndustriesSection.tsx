@@ -787,19 +787,34 @@ export const IndustriesSection: React.FC<IndustriesSectionProps> = ({
     }
   };
 
-  // Automatic one-by-one right-to-left card scrolling with 4.5s delay
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
   useEffect(() => {
-    if (isAutoPlayPaused || activeBlueprint !== null || queue.length <= 1) {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setIsInView(entries[0].isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Automatic one-by-one right-to-left card scrolling only when visible in viewport
+  useEffect(() => {
+    if (!isInView || isAutoPlayPaused || activeBlueprint !== null || queue.length <= 1) {
       return;
     }
 
-    const AUTO_PLAY_DELAY = 1800;
+    const AUTO_PLAY_DELAY = 2200;
     const timer = setInterval(() => {
       handleNext();
     }, AUTO_PLAY_DELAY);
 
     return () => clearInterval(timer);
-  }, [isAutoPlayPaused, activeBlueprint, queue.length]);
+  }, [isInView, isAutoPlayPaused, activeBlueprint, queue.length]);
 
   const activeCard = queue[0];
   const queuedCards = queue.slice(1);
@@ -810,6 +825,7 @@ export const IndustriesSection: React.FC<IndustriesSectionProps> = ({
   return (
     <section
       id="industries"
+      ref={sectionRef}
       className="py-12 sm:py-16 md:py-20 bg-[#FAFAF8] border-b border-[#E8E8E8] relative overflow-hidden"
     >
       {/* Crisp Architectural Grid Lines */}

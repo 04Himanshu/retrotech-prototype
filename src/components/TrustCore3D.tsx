@@ -228,25 +228,45 @@ export const TrustCore3D: React.FC<TrustCore3DProps> = ({ onCursorChange }) => {
       // Render
       renderer.render(scene, camera);
 
-      // Periodically update HUD readout
+      // Periodically update HUD readout only when visible
       frameCount++;
-      if (frameCount % 12 === 0) {
+      if (frameCount % 15 === 0 && isVisible) {
         setHudStats({
           rotX: Math.round(((s.currentRotation.x * 180) / Math.PI) % 360),
           rotY: Math.round(((s.currentRotation.y * 180) / Math.PI) % 360),
         });
       }
 
-      sceneState.current.rafId = requestAnimationFrame(animate);
+      if (isVisible) {
+        sceneState.current.rafId = requestAnimationFrame(animate);
+      } else {
+        sceneState.current.rafId = undefined;
+      }
     };
 
-    animate();
+    let isVisible = false;
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isVisible = entry.isIntersecting;
+        if (isVisible && !sceneState.current.rafId) {
+          sceneState.current.rafId = requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0 }
+    );
+    visibilityObserver.observe(wrapper);
+
+    // Initial trigger if already in view
+    sceneState.current.rafId = requestAnimationFrame(animate);
 
     // Cleanup on unmount
+    const stateRef = sceneState.current;
     return () => {
+      visibilityObserver.disconnect();
       resizeObserver.disconnect();
-      if (sceneState.current.rafId) {
-        cancelAnimationFrame(sceneState.current.rafId);
+      if (stateRef.rafId) {
+        cancelAnimationFrame(stateRef.rafId);
       }
       renderer.dispose();
       icosahedronGeo.dispose();

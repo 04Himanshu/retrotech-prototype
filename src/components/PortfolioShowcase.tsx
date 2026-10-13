@@ -36,31 +36,55 @@ export const PortfolioShowcase: React.FC<PortfolioShowcaseProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Scroll listener for sticky 3D parabolic deck (matching fromanother.love Section 6 Awards)
+  // Scroll listener for sticky 3D parabolic deck with RAF throttling
   useEffect(() => {
     if (isMobile) return;
 
-    const handleScroll = () => {
+    let rafId: number | null = null;
+    let lastProgress = -1;
+    let lastActiveIndex = -1;
+
+    const updateScroll = () => {
+      rafId = null;
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const totalScrollableDistance = rect.height - window.innerHeight;
 
+      // Skip when offscreen
+      if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
+
+      const totalScrollableDistance = rect.height - window.innerHeight;
       if (totalScrollableDistance <= 0) return;
 
       const currentScroll = -rect.top;
       const rawProgress = Math.min(Math.max(currentScroll / totalScrollableDistance, 0), 1);
-      setScrollProgress(rawProgress);
+
+      if (Math.abs(rawProgress - lastProgress) >= 0.002) {
+        lastProgress = rawProgress;
+        setScrollProgress(rawProgress);
+      }
 
       const targetIndex = Math.min(
         Math.floor(rawProgress * totalItems),
         totalItems - 1
       );
-      setActiveIndex(targetIndex);
+      if (targetIndex !== lastActiveIndex) {
+        lastActiveIndex = targetIndex;
+        setActiveIndex(targetIndex);
+      }
+    };
+
+    const handleScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateScroll);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    updateScroll();
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [isMobile, totalItems]);
 
   // Jump to specific project
@@ -71,7 +95,12 @@ export const PortfolioShowcase: React.FC<PortfolioShowcaseProps> = ({
       const totalScrollable = rect.height - window.innerHeight;
       const targetScrollTop =
         window.scrollY + rect.top + (index / (totalItems - 1)) * totalScrollable;
-      window.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: object) => void } }).__lenis;
+      if (lenis) {
+        lenis.scrollTo(targetScrollTop, { duration: 0.9 });
+      } else {
+        window.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      }
     }
   };
 

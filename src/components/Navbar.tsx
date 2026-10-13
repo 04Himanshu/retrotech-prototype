@@ -93,13 +93,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedTab, setMobileExpandedTab] = useState<'services' | 'industries' | 'insight' | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrolledRef = useRef(false);
 
   useEffect(() => {
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const isPastThreshold = window.scrollY > 20;
+        if (isPastThreshold !== scrolledRef.current) {
+          scrolledRef.current = isPastThreshold;
+          setScrolled(isPastThreshold);
+        }
+      });
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleMouseEnter = (menu: 'services' | 'industries' | 'insight') => {
@@ -114,6 +129,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const scrollToSection = (id: string) => {
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts?: object) => void } }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(`#${id}`, { duration: 1.1 });
+      setActiveMenu(null);
+      setMobileMenuOpen(false);
+      return;
+    }
+
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
