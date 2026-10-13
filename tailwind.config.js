@@ -31,8 +31,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'Manrope', 'system-ui', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        sans: ['"Poppins"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        serif: ['"Poppins"', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       letterSpacing: {

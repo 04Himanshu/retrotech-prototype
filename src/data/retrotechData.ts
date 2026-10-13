@@ -149,7 +149,22 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Review generation strategies across Google, Trustpilot, and Glassdoor",
       "Multi-channel social engagement with high-conversion content cadence"
     ],
-    image: "/assets/entertainment-retrotech.webp"
+    image: "/assets/marketing-nav.png"
+  },
+  {
+    id: "enterprise-cloud-devops",
+    category: "Enterprise & Cloud",
+    title: "Enterprise Cloud & DevOps",
+    subtitle: "High-Concurrency Infrastructure & Security",
+    description: "Mission-critical AWS & GCP cloud architectures with automated CI/CD pipelines, container orchestration, zero-downtime clustering, and proactive 24/7 telemetry.",
+    tags: ["AWS & Google Cloud", "Kubernetes & Docker", "CI/CD Pipelines", "SOC2 Compliance"],
+    features: [
+      "Zero-downtime blue/green deployment topologies",
+      "Automated auto-scaling pods handling high concurrency surges",
+      "Real-time telemetry, DDoS shielding, and automated database failovers",
+      "24/7 SLA-backed site reliability engineering and vulnerability audits"
+    ],
+    image: "/assets/it-services-nav.png"
   }
 ];
 
@@ -213,6 +228,18 @@ export const PORTFOLIO_DATA: ProjectItem[] = [
     metrics: "1.8M Monthly Active Viewers",
     image: "/assets/entertainment-retrotech.webp",
     aspect: "landscape"
+  },
+  {
+    id: "apex-fintech-cloud",
+    title: "Apex Capital Wealth Vault",
+    client: "Apex Global Asset Management",
+    category: "Fintech & Enterprise Security",
+    year: "2024",
+    description: "Bank-grade client portfolio management platform with biometric authentication, instant institutional settlement rails, and automated compliance auditing.",
+    deliverables: ["Institutional Portfolio Dashboard", "Real-Time NAV Settlement", "Zero-Knowledge Data Vault", "SOC2 Type II Certified"],
+    metrics: "$1.4B+ Assets Managed",
+    image: "/assets/software-development-retrotech.jpg",
+    aspect: "portrait"
   }
 ];
 

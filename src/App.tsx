@@ -11,11 +11,8 @@ import { WhyUsPillars } from './components/WhyUsPillars';
 import { FAQSection } from './components/FAQSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { CustomCursor } from './components/CustomCursor';
 
 export function App() {
-  const [cursorVariant, setCursorVariant] = useState<'default' | 'hover' | 'project' | 'drag'>('default');
-  const [cursorText, setCursorText] = useState<string>('');
   const [preselectedService, setPreselectedService] = useState<string>('Bespoke Web Development');
 
   // Initialize Lenis Smooth Scrolling
@@ -48,10 +45,7 @@ export function App() {
     };
   }, []);
 
-  const handleCursorChange = (variant: 'default' | 'hover' | 'project' | 'drag', text: string = '') => {
-    setCursorVariant(variant);
-    setCursorText(text);
-  };
+  const handleCursorChange = () => {};
 
   const handleSelectServiceForContact = (serviceTitle: string) => {
     setPreselectedService(serviceTitle);
@@ -66,9 +60,6 @@ export function App() {
 
   return (
     <div className="relative bg-[#FFFFFF] min-h-screen text-[#171717] selection:bg-[#353788] selection:text-white">
-      {/* Custom Precision Cursor */}
-      <CustomCursor cursorVariant={cursorVariant} cursorText={cursorText} />
-
       {/* Navigation */}
       <Navbar
         onCursorChange={handleCursorChange}

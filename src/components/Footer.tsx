@@ -6,6 +6,8 @@ interface FooterProps {
   onCursorChange?: (variant: 'default' | 'hover' | 'project' | 'drag', text?: string) => void;
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC<FooterProps> = ({ onCursorChange }) => {
   const [localTime, setLocalTime] = useState('');
 
@@ -63,10 +65,10 @@ export const Footer: React.FC<FooterProps> = ({ onCursorChange }) => {
   ];
 
   return (
-    <footer className="bg-white border-t border-[#E8E8E8] pt-20 pb-12 text-[#171717] relative">
+    <footer className="bg-white border-t border-[#E8E8E8] pt-12 md:pt-14 pb-8 text-[#171717] relative">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-[#E8E8E8]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-[#E8E8E8]">
           {/* Brand Column (Cols 1-5) */}
           <div className="lg:col-span-5 space-y-6">
             <a href="#" className="inline-block">
@@ -152,32 +154,25 @@ export const Footer: React.FC<FooterProps> = ({ onCursorChange }) => {
           </div>
         </div>
 
-        {/* Large Editorial Watermark */}
-        <div className="py-12 border-b border-[#E8E8E8] flex items-center justify-between overflow-hidden">
-          <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-extrabold tracking-tightest text-[#171717]/[0.06] select-none uppercase">
-            RETROTECH
-          </span>
-          <button
-            onClick={scrollToTop}
-            className="w-12 h-12 rounded-full border border-[#E8E8E8] hover:border-[#171717] bg-[#F7F7F5] hover:bg-[#171717] hover:text-white flex items-center justify-center text-[#171717] transition-all group shrink-0"
-            aria-label="Back to top"
-            onMouseEnter={() => onCursorChange?.('hover')}
-            onMouseLeave={() => onCursorChange?.('default')}
-          >
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-          </button>
-        </div>
-
-        {/* Bottom Legal Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#737373]">
+        {/* Bottom Legal Bar & Back to Top */}
+        <div className="pt-6 border-t border-[#E8E8E8] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#737373]">
           <div>
-            &copy; {new Date().getFullYear()} RetroTech Digital (B2B Export LLC). All rights reserved.
+            &copy; {CURRENT_YEAR} RetroTech Digital (B2B Export LLC). All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <span>Verified Google Ads &amp; Meta Business Partner</span>
             <span className="hidden md:inline">&bull;</span>
             <span className="hidden md:inline">CIN / B2B Export LLC</span>
           </div>
+          <button
+            onClick={scrollToTop}
+            className="w-10 h-10 rounded-full border border-[#E8E8E8] hover:border-[#171717] bg-[#F7F7F5] hover:bg-[#171717] hover:text-white flex items-center justify-center text-[#171717] transition-all group shrink-0 cursor-pointer shadow-sm"
+            aria-label="Back to top"
+            onMouseEnter={() => onCursorChange?.('hover')}
+            onMouseLeave={() => onCursorChange?.('default')}
+          >
+            <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+          </button>
         </div>
       </div>
     </footer>

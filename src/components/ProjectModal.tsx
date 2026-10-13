@@ -18,13 +18,40 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-10">
+      <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6 md:p-10">
+        {/* Backdrop */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 30 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={onClose}
+          className="fixed inset-0 bg-black/70 backdrop-blur-xl"
+        />
+
+        {/* Theatrical Curtain Reveal Blades */}
+        <motion.div
+          initial={{ scaleY: 1 }}
+          animate={{ scaleY: 0 }}
+          exit={{ scaleY: 1 }}
+          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 bg-[#111319] origin-top pointer-events-none z-[60]"
+        />
+        <motion.div
+          initial={{ scaleY: 1 }}
+          animate={{ scaleY: 0 }}
+          exit={{ scaleY: 1 }}
+          transition={{ duration: 0.45, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 bg-[#353788] origin-top pointer-events-none z-[61] border-b-2 border-[#8A8DF8]"
+        />
+
+        {/* Modal Window with spatial spring expansion */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 30 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative bg-white w-full max-w-4xl rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border border-[#E8E8E8] max-h-[90vh] flex flex-col"
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="relative bg-white w-full max-w-4xl rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border border-[#E8E8E8] max-h-[90vh] flex flex-col z-10"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top Bar */}
