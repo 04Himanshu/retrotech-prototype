@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MagneticButton } from './MagneticButton';
 import { ArrowDown, ArrowUpRight, ShieldCheck, Sparkles, Compass, Layers, Zap } from 'lucide-react';
@@ -11,11 +11,24 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onCursorChange }) => {
   const [formation, setFormation] = useState<NeuralFormation>('sphere');
 
-  const headlineLines = [
-    { text: "ENGINEERING DIGITAL", isItalic: false },
-    { text: "EXCELLENCE & SMART AI", isItalic: true },
-    { text: "FOR ENTERPRISES.", isItalic: false },
+  const rotatingServices = [
+    "SaaS Development",
+    "Digital Marketing",
+    "SEO Services",
+    "Paid Marketing",
+    "Social Media Marketing",
+    "Website Development",
+    "Software Development"
   ];
+
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveServiceIdx((prev) => (prev + 1) % rotatingServices.length);
+    }, 2400);
+    return () => clearInterval(timer);
+  }, [rotatingServices.length]);
 
   return (
     <section className="relative min-h-screen pt-24 md:pt-28 pb-8 md:pb-10 flex flex-col justify-between overflow-hidden bg-[#FFFFFF]">
@@ -55,35 +68,55 @@ export const Hero: React.FC<HeroProps> = ({ onCursorChange }) => {
           </div>
 
           {/* Oversized High-Impact Typography Reveal - Centered */}
-          <div className="space-y-1 sm:space-y-2 text-center w-full">
-            {headlineLines.map((line, idx) => (
-              <div key={idx} className="overflow-hidden">
-                <motion.h1
-                  initial={{ y: "115%" }}
-                  animate={{ y: "0%" }}
-                  transition={{
-                    duration: 1.0,
-                    delay: 0.25 + idx * 0.1,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className={`text-3xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.85rem] font-extrabold tracking-tightest leading-[0.96] text-[#171717] ${
-                    line.isItalic ? 'font-serif italic font-normal tracking-normal text-[#353788]' : ''
-                  }`}
+          <div className="space-y-2 text-center w-full">
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={{ y: "115%" }}
+                animate={{ y: "0%" }}
+                transition={{
+                  duration: 1.0,
+                  delay: 0.25,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] font-extrabold tracking-tightest leading-[1.02] text-[#171717]"
+              >
+                Business Made Easy with{' '}
+                <span className="font-serif italic font-normal text-[#353788]">
+                  Retrotech
+                </span>
+              </motion.h1>
+            </div>
+
+            {/* Rotating Active Service Pill */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center justify-center pt-2"
+            >
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#F4F5FB] border border-[#353788]/20 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#353788]" />
+                <span className="text-xs font-mono font-bold text-[#737373] uppercase tracking-wider">
+                  Specialized In:
+                </span>
+                <span
+                  key={activeServiceIdx}
+                  className="text-xs font-mono font-extrabold text-[#353788] animate-fadeIn"
                 >
-                  {line.text}
-                </motion.h1>
+                  {rotatingServices[activeServiceIdx]}
+                </span>
               </div>
-            ))}
+            </motion.div>
           </div>
 
-          {/* Narrative Value Proposition - Centered */}
+          {/* Narrative Value Proposition - Strictly Matching Live Site Copy */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
             className="text-base sm:text-lg md:text-xl text-[#737373] font-normal leading-relaxed max-w-2xl mx-auto text-center"
           >
-            We translate enterprise ambition into bespoke digital flagships, high-velocity mobile applications, custom CRM architectures, and high-yield performance marketing systems.
+            Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through modern IT, AI, and digital marketing systems.
           </motion.p>
 
           {/* Action Buttons - Centered */}
@@ -95,12 +128,12 @@ export const Hero: React.FC<HeroProps> = ({ onCursorChange }) => {
           >
             <MagneticButton>
               <a
-                href="#work"
+                href="#contact"
                 className="group inline-flex items-center gap-3 px-7 py-4 rounded-full bg-[#171717] hover:bg-[#353788] text-white text-xs md:text-sm font-semibold tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer"
                 onMouseEnter={() => onCursorChange?.('hover')}
                 onMouseLeave={() => onCursorChange?.('default')}
               >
-                <span>Explore Selected Work</span>
+                <span>Get a Free Consultation</span>
                 <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight className="w-3.5 h-3.5 text-white" />
                 </div>
@@ -109,17 +142,17 @@ export const Hero: React.FC<HeroProps> = ({ onCursorChange }) => {
 
             <MagneticButton>
               <a
-                href="#contact"
+                href="#services"
                 className="group inline-flex items-center gap-2.5 px-6 py-4 rounded-full border border-[#E8E8E8] hover:border-[#171717] bg-white text-[#171717] text-xs md:text-sm font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer shadow-xs"
                 onMouseEnter={() => onCursorChange?.('hover')}
                 onMouseLeave={() => onCursorChange?.('default')}
               >
-                <span>Request Consultation</span>
+                <span>Explore IT Solutions</span>
               </a>
             </MagneticButton>
           </motion.div>
 
-          {/* Enterprise Trust Badges Bar - Centered */}
+          {/* Enterprise Trust Badges Bar - Live Website Certified Partners */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -128,15 +161,21 @@ export const Hero: React.FC<HeroProps> = ({ onCursorChange }) => {
           >
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#353788]" />
-              <span className="text-xs font-semibold text-[#171717]">Google &amp; Meta Certified</span>
+              <span className="text-xs font-semibold text-[#171717]">Google Ads Premier Partner</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-[#D4D4D4]" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-[#171717]">Meta Business Partner</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-[#D4D4D4]" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-[#171717]">Microsoft Partner</span>
             </div>
             <div className="w-1 h-1 rounded-full bg-[#D4D4D4]" />
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold text-[#171717]">4.9★</span>
-              <span className="text-xs text-[#737373]">Verified Rating</span>
+              <span className="text-xs text-[#737373]">Google Rating</span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-[#D4D4D4]" />
-            <div className="text-xs text-[#737373]">Gurugram &bull; Serving Global Markets</div>
           </motion.div>
         </div>
       </div>

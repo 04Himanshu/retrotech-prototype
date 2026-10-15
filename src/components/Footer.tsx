@@ -34,32 +34,39 @@ export const Footer: React.FC<FooterProps> = ({ onCursorChange }) => {
 
   const navGroups = [
     {
-      title: "Solutions",
+      title: "Who We Are",
       links: [
-        { label: "Bespoke Web Development", href: "#services" },
-        { label: "Mobile App Ecosystems", href: "#services" },
-        { label: "Custom Software & SaaS", href: "#services" },
-        { label: "CRM Development & ERP", href: "#services" },
-        { label: "Performance Marketing & SEO", href: "#services" },
+        { label: "Home", href: "#hero" },
+        { label: "About Us", href: "#about" },
+        { label: "Services", href: "#services" },
+        { label: "Industries", href: "#industries" },
+        { label: "Client Reviews", href: "#testimonials" },
+        { label: "Why Choose Us", href: "#why-us" },
+        { label: "FAQs", href: "#faqs" },
+        { label: "Blog & News", href: "#blog" },
+        { label: "Contact Us", href: "#contact" },
       ]
     },
     {
-      title: "Industries",
+      title: "Our Services",
       links: [
-        { label: "Ecommerce & Multivendor", href: "#industries" },
+        { label: "Web Development", href: "#services" },
+        { label: "App Development", href: "#services" },
+        { label: "Digital Marketing", href: "#services" },
+        { label: "Software Development", href: "#services" },
+        { label: "SaaS Development", href: "#services" },
+        { label: "SEO Services", href: "#services" },
+      ]
+    },
+    {
+      title: "Our Industries",
+      links: [
         { label: "Real Estate & Construction", href: "#industries" },
-        { label: "Manufacturing & Industry", href: "#industries" },
+        { label: "Manufacturing", href: "#industries" },
+        { label: "Ecommerce & Multivendor", href: "#industries" },
+        { label: "Personal Beauty Care", href: "#industries" },
         { label: "Medical & Healthcare", href: "#industries" },
-        { label: "Media & Entertainment", href: "#industries" },
-      ]
-    },
-    {
-      title: "Company",
-      links: [
-        { label: "About Philosophy", href: "#about" },
-        { label: "Selected Work", href: "#work" },
-        { label: "The RetroTech Standard", href: "#why-us" },
-        { label: "Direct Inquiries", href: "#contact" },
+        { label: "Finance & Insurance", href: "#industries" },
       ]
     }
   ];

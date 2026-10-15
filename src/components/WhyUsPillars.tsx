@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { COMPANY_INFO } from '../data/retrotechData';
-import { TrustCore3D } from './TrustCore3D';
 import {
   ShieldCheck,
   Check,
@@ -19,15 +18,15 @@ interface WhyUsPillarsProps {
   onCursorChange?: (variant: 'default' | 'hover' | 'project' | 'drag', text?: string) => void;
 }
 
-// 6 Pillar definitions with rich Front & Back specifications (Linktree flip style)
+// Top Six Reasons to Trust Our IT Expertise directly matching https://www.retrotechdigital.com/
 const PILLARS_CONFIG = [
   {
     number: '01',
     title: 'Experienced IT Professionals',
-    desc: 'Our senior engineers, UI architects, and growth strategists deliver production-grade code adhering strictly to modern security standards.',
+    desc: 'Our skilled developers, designers, and technology experts deliver reliable solutions using proven industry practices and modern standards.',
     footerLeftType: 'dot',
     footerLeftText: '100% Senior Squads',
-    footerRightText: 'Zero Tech Debt',
+    footerRightText: 'Proven Practices',
     iconType: 'terminal',
     // Back Face Details
     backSubtitle: 'Technical Rigor & Staffing',
@@ -42,68 +41,68 @@ const PILLARS_CONFIG = [
   },
   {
     number: '02',
-    title: 'Always Honest & Transparent',
-    desc: 'No hidden clauses or inflated claims. You receive direct communication, weekly sprint demos, and unvarnished analytics from day one.',
+    title: 'Customised Business Solutions',
+    desc: 'We create tailored websites, applications, software, and digital solutions that match your unique business processes and objectives.',
     footerLeftType: 'git',
-    footerLeftText: 'Weekly Demo Calls',
-    footerRightText: 'Transparent Repo',
+    footerLeftText: 'Tailored Solutions',
+    footerRightText: 'Zero Bloat',
     iconType: 'check',
     // Back Face Details
-    backSubtitle: 'Open Governance & Access',
+    backSubtitle: 'Custom Business Fit',
     backPoints: [
-      'Direct Slack & WhatsApp sync with lead devs',
+      'Custom architecture tailored to your workflows',
       'Live sprint demos & working code every 7 days',
       'Full GitHub repository access from sprint 1',
       'Uncensored burn rates & clear timesheets',
     ],
-    backBadge: '100% IP & Code Ownership',
-    backMetric: 'Zero Hidden Clauses',
+    backBadge: '100% Custom Engineering',
+    backMetric: 'Tailored Workflows',
   },
   {
     number: '03',
-    title: 'Business-First Architecture',
-    desc: 'We begin by diagnosing your business model, customer touchpoints, and revenue drivers before writing a single line of code.',
+    title: 'On-Time Project Delivery',
+    desc: 'We use the latest tools, frameworks, and technologies to build secure, high-performing, and future-ready digital products on schedule.',
     footerLeftType: 'layers',
-    footerLeftText: 'ROI Blueprint First',
-    footerRightText: 'Scalable Architecture',
+    footerLeftText: 'Modern Stack',
+    footerRightText: 'On-Time Delivery',
     iconType: 'layers',
     // Back Face Details
-    backSubtitle: 'Engineering Tied to Revenue',
+    backSubtitle: 'Future-Ready Tech Stack',
     backPoints: [
-      'Comprehensive user flow & unit economic audit',
       'Sub-second Core Web Vitals optimization',
+      'Strict milestone tracking and release dates',
       'Architected for 10x traffic concurrency bursts',
       'Full telemetry & attribution data modeling',
     ],
-    backBadge: 'ROI-Driven Tech Stack',
-    backMetric: '99.98% Core Uptime',
+    backBadge: 'Modern Frameworks',
+    backMetric: '99.4% On-Schedule',
   },
   {
     number: '04',
-    title: 'Agile & Rapid Deployment',
-    desc: 'Iterative two-week sprints ensure swift time-to-market without sacrificing architectural stability or comprehensive test coverage.',
+    title: 'Transparent Communication',
+    desc: 'We maintain clear communication, transparent sprint processes, and timely milestone demos throughout every stage of your project.',
     footerLeftType: 'zap',
-    footerLeftText: '2-Week Sprints',
-    footerRightText: '99.4% On-Time',
+    footerLeftText: 'Open Governance',
+    footerRightText: 'Regular Demos',
     iconType: 'zap',
     // Back Face Details
     backSubtitle: 'Predictable Sprint Velocity',
     backPoints: [
-      'Strict two-week sprint milestones with demo signoffs',
+      'Direct Slack & WhatsApp sync with lead devs',
       'Automated CI/CD pipelines & staging sandboxes',
       'Blue/green zero-downtime production rollouts',
       'Automated regression & end-to-end testing',
     ],
-    backBadge: '2-Week Rapid Milestones',
-    backMetric: '99.4% On-Schedule',
+    backBadge: 'Transparent Reporting',
+    backMetric: 'Weekly Milestones',
   },
   {
     number: '05',
-    title: 'End-to-End 360° Capability',
-    desc: 'From initial UI/UX blueprints to full-stack code, cloud infrastructure, SEO dominance, and paid marketing, all under one roof.',
+    title: 'Scalable & Secure Technologies',
+    desc: 'Every solution is carefully designed, developed, tested, and optimized to provide an excellent user experience and enterprise stability.',
     footerLeftType: 'sparkles',
-    footerLeftText: 'Tech + Cloud + Growth',
-    footerRightText: 'Unified 360°',
+    footerLeftText: 'Enterprise Security',
+    footerRightText: 'Optimal UX',
     iconType: 'award',
     // Back Face Details
     backSubtitle: 'Single-Squad Execution',
@@ -113,16 +112,16 @@ const PILLARS_CONFIG = [
       'Cloud DevOps, Kubernetes clusters & security',
       'Technical SEO, Google Ads & Meta conversion campaigns',
     ],
-    backBadge: 'Complete Product Lifecycle',
-    backMetric: 'Zero Hand-Off Gaps',
+    backBadge: 'Enterprise Stability',
+    backMetric: '99.98% Core Uptime',
   },
   {
     number: '06',
     title: 'Dedicated Post-Launch Support',
-    desc: 'We provide SLA-backed maintenance, proactive server monitoring, security patching, and ongoing performance tuning.',
+    desc: 'We provide cost-effective IT services and SLA-backed maintenance that can easily scale and adapt as your business continues to grow.',
     footerLeftType: 'dot',
-    footerLeftText: '24/7 Telemetry',
-    footerRightText: '<15m Response SLA',
+    footerLeftText: 'Continuous Care',
+    footerRightText: 'Scalable Support',
     iconType: 'server',
     // Back Face Details
     backSubtitle: 'Enterprise SLA & Active Care',
@@ -132,7 +131,7 @@ const PILLARS_CONFIG = [
       '24/7 Datadog/CloudWatch uptime alerts & telemetry',
       'Monthly security patching & framework dependency upgrades',
     ],
-    backBadge: '24/7 Proactive Monitoring',
+    backBadge: '24/7 Proactive Care',
     backMetric: '<15m Incident SLA',
   },
 ];
@@ -341,7 +340,7 @@ const PillarFeatureCard: React.FC<PillarFeatureCardProps> = ({ pillar, index, on
         </div>
 
         {/* ============================================================== */}
-        {/* BACK FACE OF CARD (Deep Technical Specification & Proof) */}
+        {/* BACK FACE OF CARD (Aligned with Clean Light Website Theme)       */}
         {/* ============================================================== */}
         <div
           style={{
@@ -349,38 +348,45 @@ const PillarFeatureCard: React.FC<PillarFeatureCardProps> = ({ pillar, index, on
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
           }}
-          className="absolute inset-0 z-10 w-full h-full p-7 sm:p-8 rounded-[23px] bg-[#101226] text-white border border-[#353788]/40 shadow-2xl flex flex-col justify-between overflow-hidden"
+          className={`absolute inset-0 z-10 w-full h-full p-7 sm:p-8 rounded-[23px] bg-white border border-[#E8E8E8] shadow-[0_12px_36px_rgba(53,55,136,0.08)] flex flex-col justify-between overflow-hidden ${
+            isActive ? 'border-transparent' : 'border-[#353788]/25'
+          }`}
         >
-          {/* Subtle Ambient Radial Glow on Back */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#353788]/25 rounded-full blur-2xl pointer-events-none" />
+          {/* Subtle Ambient Top Border Highlight */}
+          <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-[#353788] to-transparent opacity-80" />
+
+          {/* Faint Large Background Watermark Number */}
+          <div className="pointer-events-none absolute -bottom-5 -right-2 text-8xl sm:text-9xl font-mono font-black select-none tracking-tighter text-[#353788]/[0.05]">
+            {pillar.number}
+          </div>
 
           {/* Top Row: Spec Tag & Flip Back Indicator */}
           <div className="relative z-10 flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-mono font-black text-[#818cf8]">
+            <div className="flex items-center gap-2.5">
+              <span className="text-2xl sm:text-3xl font-mono font-black text-[#353788]">
                 {pillar.number}
               </span>
-              <span className="text-[9px] font-mono tracking-widest text-[#a5b4fc] bg-[#353788]/40 border border-[#818cf8]/40 px-2.5 py-0.5 rounded-full">
+              <span className="text-[9.5px] font-mono font-bold tracking-wider uppercase text-[#353788] bg-[#F4F5FB] border border-[#353788]/15 px-2.5 py-0.5 rounded-full">
                 VERIFIED SPEC
               </span>
             </div>
 
-            <span className="flex items-center gap-1.5 text-[10px] font-mono text-[#a5b4fc] bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-full transition-colors">
-              <RotateCw className="w-2.5 h-2.5" />
+            <span className="flex items-center gap-1.5 text-[10px] font-mono text-[#737373] bg-[#F7F7F5] border border-[#E8E8E8] px-2.5 py-1 rounded-full">
+              <RotateCw className="w-2.5 h-2.5 text-[#353788]" />
               <span>Flip</span>
             </span>
           </div>
 
           {/* Center Content: Detailed Technical Points */}
-          <div className="relative z-10 flex-1 flex flex-col justify-center">
-            <h4 className="text-base sm:text-lg font-bold text-white mb-3.5 tracking-tight">
+          <div className="relative z-10 flex-1 flex flex-col justify-center my-1">
+            <h4 className="text-base sm:text-lg font-bold text-[#171717] mb-3 tracking-tight">
               {pillar.backSubtitle}
             </h4>
 
-            <ul className="space-y-2.5 text-xs sm:text-[13px] text-[#cbd5e1] leading-snug">
+            <ul className="space-y-2 text-xs sm:text-[13px] text-[#525252] leading-snug">
               {pillar.backPoints.map((point, ptIdx) => (
                 <li key={ptIdx} className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#818cf8] mt-1.5 flex-shrink-0 shadow-[0_0_8px_#818cf8]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#353788] mt-1.5 flex-shrink-0" />
                   <span>{point}</span>
                 </li>
               ))}
@@ -388,13 +394,13 @@ const PillarFeatureCard: React.FC<PillarFeatureCardProps> = ({ pillar, index, on
           </div>
 
           {/* Bottom Footer: SLA & Proof Badge */}
-          <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-mono">
-            <div className="flex items-center gap-2 text-emerald-400 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="relative z-10 pt-4 border-t border-[#F0F0EE] flex items-center justify-between text-[11px] font-mono">
+            <div className="flex items-center gap-2 text-emerald-600 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>{pillar.backBadge}</span>
             </div>
 
-            <span className="text-[#a5b4fc] font-bold">
+            <span className="text-[#353788] font-bold">
               {pillar.backMetric}
             </span>
           </div>
@@ -510,7 +516,7 @@ export const WhyUsPillars: React.FC<WhyUsPillarsProps> = ({ onCursorChange }) =>
   };
 
   return (
-    <section id="why-us" className="py-12 sm:py-16 md:py-20 bg-[#FFFFFF] border-b border-[#E8E8E8] relative overflow-hidden">
+    <section id="why-us" className="py-10 sm:py-12 md:py-14 bg-[#FFFFFF] border-b border-[#E8E8E8] relative overflow-hidden">
       {/* Clean Technical Blueprint Aesthetic with Subtle Grid Background */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[linear-gradient(to_right,#171717_1px,transparent_1px),linear-gradient(to_bottom,#171717_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
@@ -518,92 +524,86 @@ export const WhyUsPillars: React.FC<WhyUsPillarsProps> = ({ onCursorChange }) =>
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[550px] bg-[#353788]/[0.03] rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        {/* Section 05 Top Showcase: Narrative + Interactive 3D Quantum Trust Core */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch mb-10 sm:mb-12">
-          {/* Left Column: Editorial Headline & Engineering Commitments */}
-          <div className="lg:col-span-7 flex flex-col justify-between h-full py-1">
-            <div>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="flex items-center gap-3 mb-4"
-              >
-                <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#353788]">
-                  05 &bull; The RetroTech Standard
-                </span>
-                <div className="w-12 h-[1px] bg-[#353788]" />
-                <span className="text-[10px] font-mono text-[#737373] hidden sm:inline-block">
-                  [ SYS_VERIFICATION // RT-STD ]
-                </span>
-              </motion.div>
-
-              <motion.h2
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tightest text-[#171717] leading-[1.05] mb-6"
-              >
-                Reasons to Trust <br />
-                <span className="font-serif italic font-normal text-[#353788]">Our Technical Expertise</span>
-              </motion.h2>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="max-w-xl text-base md:text-lg text-[#737373] leading-relaxed mb-6"
-              >
-                We operate with the speed of an agile product squad and the governance of an enterprise consultancy. No bureaucracy, no technical shortcuts, and complete transparent oversight.
-              </motion.p>
-            </div>
-
-            {/* Technical Verification Highlights Grid anchored at the bottom baseline */}
+        {/* Section 05 Top Showcase: Narrative Headline & Verification Highlights */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-7 sm:mb-8">
+          <div className="max-w-2xl">
             <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex items-center gap-3 mb-3.5"
+            >
+              <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#353788]">
+                Why Choose Us
+              </span>
+              <div className="w-10 h-[1px] bg-[#353788]/60" />
+              <span className="text-[10px] font-mono text-[#737373]">
+                Verified Trust Architecture
+              </span>
+            </motion.div>
+
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 lg:pt-8 mt-auto"
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tightest text-[#171717] leading-[1.1] mb-4"
             >
-              <div className="p-4 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] shadow-xs">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span className="text-sm font-mono font-bold text-[#171717]">99.4%</span>
-                </div>
-                <span className="text-xs text-[#737373] block leading-tight font-medium">Client Retention Rate</span>
-              </div>
+              Top Six Reasons to <br />
+              <span className="font-serif italic font-normal text-[#353788]">
+                Trust Our IT Expertise
+              </span>
+            </motion.h2>
 
-              <div className="p-4 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] shadow-xs">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Activity className="w-3.5 h-3.5 text-[#353788]" />
-                  <span className="text-sm font-mono font-bold text-[#171717]">99.98%</span>
-                </div>
-                <span className="text-xs text-[#737373] block leading-tight font-medium">Uptime &amp; SLA Guarantee</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] col-span-2 sm:col-span-1 shadow-xs">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-sm font-mono font-bold text-[#171717]">Zero-Debt</span>
-                </div>
-                <span className="text-xs text-[#737373] block leading-tight font-medium">Audited Codebases</span>
-              </div>
-            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-sm sm:text-base text-[#737373] leading-relaxed"
+            >
+              Empower your business with reliable, secure, and scalable IT solutions tailored to your unique goals and requirements.
+            </motion.p>
           </div>
 
-          {/* Right Column: Three.js Interactive 3D Quantum Trust Core */}
+          {/* Technical Verification Highlights Grid */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 h-full flex flex-col"
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 w-full lg:w-auto shrink-0"
           >
-            <TrustCore3D onCursorChange={onCursorChange} />
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] shadow-xs min-w-[150px]">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-base font-mono font-bold text-[#171717]">99.4%</span>
+              </div>
+              <span className="text-xs text-[#737373] block leading-tight font-medium">
+                Client Retention
+              </span>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] shadow-xs min-w-[150px]">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Activity className="w-3.5 h-3.5 text-[#353788]" />
+                <span className="text-base font-mono font-bold text-[#171717]">99.98%</span>
+              </div>
+              <span className="text-xs text-[#737373] block leading-tight font-medium">
+                Uptime &amp; SLA
+              </span>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F7F7F5] border border-[#E8E8E8] shadow-xs min-w-[150px]">
+              <div className="flex items-center gap-2 mb-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-base font-mono font-bold text-[#171717]">Zero-Debt</span>
+              </div>
+              <span className="text-xs text-[#737373] block leading-tight font-medium">
+                Audited Codebases
+              </span>
+            </div>
           </motion.div>
         </div>
 

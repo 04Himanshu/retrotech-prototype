@@ -131,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const scrollToSection = (id: string) => {
     const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts?: object) => void } }).__lenis;
     if (lenis) {
-      lenis.scrollTo(`#${id}`, { duration: 1.1 });
+      lenis.scrollTo(`#${id}`, { offset: -80, duration: 1.2 });
       setActiveMenu(null);
       setMobileMenuOpen(false);
       return;

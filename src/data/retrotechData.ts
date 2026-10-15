@@ -9,19 +9,6 @@ export interface ServiceItem {
   image: string;
 }
 
-export interface ProjectItem {
-  id: string;
-  title: string;
-  client: string;
-  category: string;
-  year: string;
-  description: string;
-  deliverables: string[];
-  metrics: string;
-  image: string;
-  aspect: string;
-}
-
 export interface IndustryItem {
   id: string;
   name: string;
@@ -29,6 +16,20 @@ export interface IndustryItem {
   description: string;
   iconName: string;
   image: string;
+  badge?: string;
+}
+
+export interface TestimonialItem {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  country: string;
+  flag: string;
+  service: string;
+  rating: number;
+  content: string;
+  avatar: string;
 }
 
 export interface FAQItem {
@@ -36,16 +37,37 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface BlogItem {
+  id: string;
+  title: string;
+  category: string;
+  date: string;
+  comments: string;
+  summary: string;
+  image: string;
+}
+
 export const COMPANY_INFO = {
   name: "RetroTech Digital",
   legalName: "B2B Export LLC / RetroTech Digital",
-  tagline: "Smart IT, AI & Marketing Solutions for Visionary Enterprises",
-  shortDesc: "A 360° IT and Digital Solutions Company dedicated to empowering businesses with bespoke web development, mobile ecosystems, enterprise cloud, and performance marketing.",
+  tagline: "Smart IT, AI and Marketing Solutions for Every Business",
+  heroHeadline: "Business Made Easy with Retrotech",
+  heroServices: [
+    "SaaS Development",
+    "Digital Marketing",
+    "SEO Services",
+    "Paid Marketing",
+    "Social Media Marketing",
+    "Website Development",
+    "Software Development"
+  ],
+  heroSubtitle: "Grow your business and boost revenue by engaging customers, automating messages, and selling smarter through modern IT and digital marketing systems.",
+  shortDesc: "A 360° IT and Digital Solutions Company dedicated to empowering businesses in the digital era. We provide innovative services that help organizations streamline operations, enhance performance, and drive measurable results.",
   logo: "/assets/retrotech-logo.png",
   phone: "+91-9910836538",
   phoneClean: "+919910836538",
   email: "info@retrotechdigital.com",
-  location: "O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India — 122002",
+  location: "O-126, O-145, O-146 The Shopping Mall, Arjun Marg, DLF Phase 1, Gurugram, Haryana, India, 122002",
   mapUrl: "https://maps.google.com/?q=DLF+Phase+1+Gurugram",
   socials: {
     linkedin: "https://www.linkedin.com/company/retrotech-digital",
@@ -60,73 +82,44 @@ export const COMPANY_INFO = {
   ]
 };
 
+// Services directly matching https://www.retrotechdigital.com/
 export const SERVICES_DATA: ServiceItem[] = [
   {
     id: "web-development",
     category: "Tech Development",
-    title: "Bespoke Web Development",
-    subtitle: "High-Performance Digital Flagships",
-    description: "We architect ultra-fast, responsive web applications and corporate flagships that articulate brand authority, elevate search rankings, and convert high-intent traffic.",
-    tags: ["React & Next.js", "Full-Stack Architecture", "Headless CMS", "Enterprise Security"],
+    title: "Web Development",
+    subtitle: "High-Performance Modern Websites",
+    description: "Build fast, responsive websites that strengthen your brand, elevate customer engagement, and drive sustainable business growth.",
+    tags: ["React & Next.js", "WordPress & Headless CMS", "Custom Architecture", "Responsive Design"],
     features: [
-      "Custom responsive design engineered with micro-interactions",
+      "Custom responsive design engineered with modern micro-interactions",
       "Sub-second Core Web Vitals optimization and SEO structuring",
       "Robust API integration with legacy enterprise backends",
       "Scalable cloud deployment with automated CI/CD pipelines"
     ],
-    image: "/assets/web-development-retrotech.jpg"
+    image: "/assets/service-web-real.jpg"
   },
   {
     id: "mobile-app-development",
     category: "Tech Development",
-    title: "Mobile App Development",
+    title: "App Development",
     subtitle: "Native & Cross-Platform Experiences",
-    description: "Engineered for intuitive touch engagement, seamless performance, and offline-first dependability across iOS and Android ecosystems.",
-    tags: ["iOS & Android", "React Native", "Flutter", "Real-Time Sync"],
+    description: "Develop powerful mobile apps that engage customers, streamline user journeys, and accelerate your business across iOS and Android.",
+    tags: ["iOS & Android", "React Native & Flutter", "Real-Time Sync", "Intuitive UI/UX"],
     features: [
       "Native-grade fluid animations and gesture-driven UI",
       "End-to-end telemetry, push notifications, and analytics",
       "Secure payment gateway integrations and biometric authentication",
       "App Store & Google Play compliance, deployment, and lifecycle maintenance"
     ],
-    image: "/assets/app-development-retrotech.jpg"
+    image: "/assets/service-app-real.jpg"
   },
   {
-    id: "custom-software-saas",
-    category: "Tech Development",
-    title: "Custom Software & SaaS",
-    subtitle: "Cloud Architectures Built to Scale",
-    description: "Purpose-built multi-tenant software, microservices, and internal tooling that streamline mission-critical operations and eliminate workflow bottlenecks.",
-    tags: ["SaaS Architecture", "Microservices", "REST & GraphQL APIs", "DevOps"],
-    features: [
-      "Scalable multi-tenant architectures designed for 99.99% uptime",
-      "Role-based access control (RBAC) and enterprise data governance",
-      "Automated automated database scaling and distributed caching",
-      "Comprehensive API documentation and developer sandbox"
-    ],
-    image: "/assets/software-development-retrotech.jpg"
-  },
-  {
-    id: "crm-enterprise",
-    category: "Tech Development",
-    title: "CRM Development & ERPNext",
-    subtitle: "Unified Sales & Operations Systems",
-    description: "Consolidate sales pipelines, customer interactions, lead routing, and ERP workflows into an intuitive, automated single pane of glass.",
-    tags: ["CRM Systems", "ERPNext Integration", "Salesforce", "Workflow Automation"],
-    features: [
-      "Custom pipeline visualizers and automated lead distribution",
-      "Deep WhatsApp Business API and multi-channel messaging sync",
-      "Executive KPI dashboards with predictive revenue forecasting",
-      "Automated invoicing, accounting, and supply chain bridges"
-    ],
-    image: "/assets/enterprise.webp"
-  },
-  {
-    id: "digital-marketing-seo",
+    id: "digital-marketing",
     category: "Marketing Platform",
-    title: "Performance Marketing & SEO",
-    subtitle: "Data-Driven Revenue Acceleration",
-    description: "Hyper-targeted paid media acquisition across Google, Meta, and programmatic networks combined with authoritative organic search positioning.",
+    title: "Digital Marketing",
+    subtitle: "Data-Driven Revenue Growth",
+    description: "Increase your online visibility, generate quality leads, and scale your revenue through multi-channel SEO, PPC, and paid advertising.",
     tags: ["Search Engine Optimization", "PPC Campaigns", "Meta Ads", "Conversion Rate Optimization"],
     features: [
       "Technical SEO audits, schema injection, and keyword authority strategy",
@@ -134,219 +127,340 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Attribution modeling and multi-touch customer journey analytics",
       "WhatsApp automated retargeting and conversational marketing flows"
     ],
-    image: "/assets/digital-marketing-retrotech.jpg"
+    image: "/assets/service-marketing-real.jpg"
   },
   {
-    id: "brand-creative-orm",
-    category: "Marketing Platform",
-    title: "Brand Strategy, Content & ORM",
-    subtitle: "Reputation & Visual Storytelling",
-    description: "Cultivate distinctive brand prestige and safeguard enterprise digital reputation through proactive media monitoring and high-impact content.",
-    tags: ["Online Reputation Management", "Creative Direction", "Video Marketing", "Social Media"],
+    id: "software-development",
+    category: "Tech Development",
+    title: "Software Development",
+    subtitle: "Custom Business Efficiency Systems",
+    description: "Custom software solutions designed to improve operational efficiency, automate workflows, and scale your business securely.",
+    tags: ["Custom Software", "Enterprise Portals", "API Development", "Workflow Automation"],
     features: [
-      "Active brand sentiment tracking and crisis response management",
-      "Editorial storytelling, corporate video, and visual identity systems",
-      "Review generation strategies across Google, Trustpilot, and Glassdoor",
-      "Multi-channel social engagement with high-conversion content cadence"
+      "Scalable multi-tenant architectures designed for 99.99% uptime",
+      "Role-based access control (RBAC) and enterprise data governance",
+      "Automated database scaling and distributed caching",
+      "Comprehensive API documentation and developer sandboxes"
     ],
-    image: "/assets/marketing-nav.png"
+    image: "/assets/service-software-real.jpg"
   },
   {
-    id: "enterprise-cloud-devops",
-    category: "Enterprise & Cloud",
-    title: "Enterprise Cloud & DevOps",
-    subtitle: "High-Concurrency Infrastructure & Security",
-    description: "Mission-critical AWS & GCP cloud architectures with automated CI/CD pipelines, container orchestration, zero-downtime clustering, and proactive 24/7 telemetry.",
-    tags: ["AWS & Google Cloud", "Kubernetes & Docker", "CI/CD Pipelines", "SOC2 Compliance"],
+    id: "saas-development",
+    category: "Tech Development",
+    title: "SaaS Development",
+    subtitle: "Cloud Products Built for Scale",
+    description: "Create secure, scalable SaaS products that support long-term business success, multi-tier subscriptions, and high-concurrency users.",
+    tags: ["Multi-Tenant Cloud", "Microservices", "Billing & Subscriptions", "High Availability"],
     features: [
       "Zero-downtime blue/green deployment topologies",
-      "Automated auto-scaling pods handling high concurrency surges",
+      "Automated auto-scaling pods handling concurrency surges",
       "Real-time telemetry, DDoS shielding, and automated database failovers",
-      "24/7 SLA-backed site reliability engineering and vulnerability audits"
+      "Subscription management, Stripe billing orchestration, and tiered quotas"
     ],
-    image: "/assets/it-services-nav.png"
+    image: "/assets/service-saas-real.jpg"
   }
 ];
 
-export const PORTFOLIO_DATA: ProjectItem[] = [
-  {
-    id: "omni-ecommerce",
-    title: "Aura Multivendor Hub",
-    client: "Global Retail Collective",
-    category: "Ecommerce & Multivendor Platform",
-    year: "2024",
-    description: "A high-velocity headless commerce ecosystem connecting over 400 premium merchants with synchronized inventory, ultra-fast checkout, and AI recommendations.",
-    deliverables: ["Headless Next.js Frontend", "Custom Vendor Dashboard", "Payment Orchestration", "99.98% Core Uptime"],
-    metrics: "+148% Checkout Velocity",
-    image: "/assets/ecommerce-retrotech.webp",
-    aspect: "landscape"
-  },
-  {
-    id: "metropolis-realestate",
-    title: "Metropolis Luxury Estates",
-    client: "Metropolis Realty Group",
-    category: "Real Estate & Construction Tech",
-    year: "2024",
-    description: "An architectural digital showcase featuring interactive masterplans, 3D property walkthroughs, instant virtual booking, and integrated broker CRM.",
-    deliverables: ["Interactive Property Explorer", "Automated Lead Routing", "Custom Broker Portal", "Virtual Tour Integration"],
-    metrics: "3.4x Lead Engagement",
-    image: "/assets/realestate-retrotech.webp",
-    aspect: "portrait"
-  },
-  {
-    id: "sovereign-manufacturing",
-    title: "Nexus Industrial IoT Suite",
-    client: "Precision Dynamics Corporation",
-    category: "Manufacturing & Supply Chain",
-    year: "2023",
-    description: "Enterprise operations suite monitoring shop-floor telemetry, predictive machinery maintenance, and automated supply procurement across 6 manufacturing hubs.",
-    deliverables: ["Real-Time Sensor Telemetry", "Predictive Alert Engine", "ERPNext Customization", "Mobile Floor Inspector"],
-    metrics: "42% Reduction in Downtime",
-    image: "/assets/manufacturing-retrotech.webp",
-    aspect: "landscape"
-  },
-  {
-    id: "curis-healthcare",
-    title: "Curis Telehealth Network",
-    client: "Curis Health Systems",
-    category: "Medical & Healthcare Ecosystem",
-    year: "2023",
-    description: "A secure, HIPAA-compliant patient consultation portal integrating encrypted video calls, digitized EHR access, prescription delivery, and smart scheduling.",
-    deliverables: ["HIPAA-Compliant Architecture", "WebRTC Video Engine", "Patient EHR Mobile App", "Doctor Availability Sync"],
-    metrics: "250k+ Consultations Handled",
-    image: "/assets/beauty-personal-care-retrotech.webp",
-    aspect: "portrait"
-  },
-  {
-    id: "hypergrowth-media",
-    title: "PulseWave Media Network",
-    client: "PulseWave Entertainment",
-    category: "Media & Streaming Infrastructure",
-    year: "2024",
-    description: "Scalable content management, video distribution network, and creator subscription monetisation platform designed for high-concurrency live audiences.",
-    deliverables: ["Low-Latency Video Player", "Subscriber Paywall", "Creator Analytics Portal", "Brand Sponsorship Engine"],
-    metrics: "1.8M Monthly Active Viewers",
-    image: "/assets/entertainment-retrotech.webp",
-    aspect: "landscape"
-  },
-  {
-    id: "apex-fintech-cloud",
-    title: "Apex Capital Wealth Vault",
-    client: "Apex Global Asset Management",
-    category: "Fintech & Enterprise Security",
-    year: "2024",
-    description: "Bank-grade client portfolio management platform with biometric authentication, instant institutional settlement rails, and automated compliance auditing.",
-    deliverables: ["Institutional Portfolio Dashboard", "Real-Time NAV Settlement", "Zero-Knowledge Data Vault", "SOC2 Type II Certified"],
-    metrics: "$1.4B+ Assets Managed",
-    image: "/assets/software-development-retrotech.jpg",
-    aspect: "portrait"
-  }
-];
-
+// 11 Industries directly matching https://www.retrotechdigital.com/
 export const INDUSTRIES_DATA: IndustryItem[] = [
-  {
-    id: "ecommerce",
-    name: "Ecommerce & Multivendor",
-    tagline: "High-Conversion Commerce Architectures",
-    description: "Turn casual browsing into high-ticket transactions through custom marketplaces, instant checkout paths, and smart loyalty engines.",
-    iconName: "ShoppingCart",
-    image: "/assets/ecommerce-retrotech.webp"
-  },
   {
     id: "realestate",
     name: "Real Estate & Construction",
-    tagline: "Immersive Architectural Portals",
-    description: "Bespoke digital showcases, interactive inventory floorplans, automated lead scoring, and dedicated CRM for premier developers.",
+    tagline: "Modern Portals & CRM Systems",
+    description: "Modern websites, CRM systems, interactive property floorplans, and digital marketing solutions for real estate businesses.",
     iconName: "Building2",
-    image: "/assets/realestate-retrotech.webp"
+    image: "/assets/industry-realestate-hd.jpg",
+    badge: "Property Tech"
   },
   {
     id: "manufacturing",
-    name: "Manufacturing & Industry",
-    tagline: "Digitized Supply & Operations",
-    description: "Transform plant-floor operations with live IoT telemetry dashboards, automated vendor portals, and integrated ERP systems.",
+    name: "Manufacturing",
+    tagline: "Automation & Operations",
+    description: "Streamline plant-floor operations with custom software, workflow automation, IoT telemetry dashboards, and enterprise solutions.",
     iconName: "Factory",
-    image: "/assets/manufacturing-retrotech.webp"
+    image: "/assets/industry-manufacturing-hd.jpg",
+    badge: "Industrial IoT"
+  },
+  {
+    id: "ecommerce",
+    name: "Ecommerce & Multivendor",
+    tagline: "High-Converting Online Stores",
+    description: "Build high-converting online stores and multivendor marketplaces with seamless shopping experiences, fast checkout, and secure payments.",
+    iconName: "ShoppingCart",
+    image: "/assets/industry-ecommerce-hd.jpg",
+    badge: "Commerce Core"
+  },
+  {
+    id: "personal-beauty-care",
+    name: "Personal Beauty Care",
+    tagline: "Booking Systems & Growth",
+    description: "Grow your beauty and wellness brand with seamless appointment booking systems, branded mobile-first websites, and digital marketing.",
+    iconName: "Sparkles",
+    image: "/assets/industry-beauty-hd.jpg",
+    badge: "Lifestyle & Retail"
+  },
+  {
+    id: "entertainment",
+    name: "Media & Entertainment",
+    tagline: "Creative Digital Platforms",
+    description: "Engage audiences through creative digital platforms, high-concurrency streaming apps, and high-impact promotional campaigns.",
+    iconName: "Film",
+    image: "/assets/industry-entertainment-hd.jpg",
+    badge: "Streaming Media"
   },
   {
     id: "healthcare",
     name: "Medical & Healthcare",
-    tagline: "Compliant Patient Care Ecosystems",
-    description: "Secure patient engagement portals, automated appointment engines, telemedicine infrastructure, and strict privacy protocols.",
+    tagline: "Secure Patient Care Portals",
+    description: "Secure healthcare software, HIPAA-compliant patient portals, automated appointment engines, and digital solutions for better patient care.",
     iconName: "Stethoscope",
-    image: "/assets/beauty-personal-care-retrotech.webp"
+    image: "/assets/industry-healthcare-hd.jpg",
+    badge: "Healthcare SLA"
   },
   {
-    id: "media",
-    name: "Media & Entertainment",
-    tagline: "High-Concurrency Content Hubs",
-    description: "Dynamic video streaming engines, interactive audience portals, multi-tier subscription models, and content management workflows.",
-    iconName: "Film",
-    image: "/assets/entertainment-retrotech.webp"
-  },
-  {
-    id: "fintech",
-    name: "Finance & Professional Services",
-    tagline: "Enterprise Security & Precision",
-    description: "Bank-grade client onboarding, wealth reporting dashboards, secure document vaults, and stringent regulatory compliance.",
+    id: "insurance",
+    name: "Finance & Insurance",
+    tagline: "Policy Management & Security",
+    description: "Simplify policy management, claims processing, and customer engagement with bank-grade security and smart digital solutions.",
     iconName: "ShieldCheck",
-    image: "/assets/software-development-retrotech.jpg"
+    image: "/assets/industry-insurance-hd.jpg",
+    badge: "Fintech Security"
+  },
+  {
+    id: "travel",
+    name: "Travel & Hospitality",
+    tagline: "Dynamic Booking Platforms",
+    description: "Enhance travel experiences with intuitive booking platforms, destination websites, and feature-rich mobile guest applications.",
+    iconName: "Compass",
+    image: "/assets/industry-travel-hd.jpg",
+    badge: "Travel Tech"
+  },
+  {
+    id: "elearning",
+    name: "EdTech & E-Learning",
+    tagline: "Virtual Classrooms & Courses",
+    description: "Develop interactive e-learning platforms with virtual classrooms, digital course management, and progress assessment dashboards.",
+    iconName: "Layers",
+    image: "/assets/industry-elearning-hd.jpg",
+    badge: "Education Tech"
+  },
+  {
+    id: "logistics",
+    name: "Transportation & Logistics",
+    tagline: "Fleet & Supply Tracking",
+    description: "Optimize supply chain operations with modern logistics software, automated dispatching, and real-time fleet tracking systems.",
+    iconName: "Zap",
+    image: "/assets/industry-logistics-hd.jpg",
+    badge: "Supply Chain"
+  },
+  {
+    id: "oil-gas",
+    name: "Oil and Gas",
+    tagline: "Enterprise Modernization",
+    description: "Digital transformation solutions that improve operational efficiency, asset telemetry, compliance auditing, and business performance.",
+    iconName: "Cpu",
+    image: "/assets/industry-oilgas-hd.jpg",
+    badge: "Energy Tech"
   }
 ];
 
+// Top Six Reasons to Trust Our IT Expertise directly matching https://www.retrotechdigital.com/
 export const PILLARS_DATA = [
   {
     number: "01",
     title: "Experienced IT Professionals",
-    desc: "Our senior engineers, UI architects, and growth strategists deliver production-grade code adhering strictly to modern security standards."
+    desc: "Our skilled developers, designers, and technology experts deliver reliable solutions using proven industry practices and modern standards."
   },
   {
     number: "02",
-    title: "Always Honest & Transparent",
-    desc: "No hidden clauses or inflated claims. You receive direct communication, weekly sprint demos, and unvarnished analytics from day one."
+    title: "Customised Business Solutions",
+    desc: "We create tailored websites, applications, software, and digital solutions that match your unique business processes and objectives."
   },
   {
     number: "03",
-    title: "Business-First Architecture",
-    desc: "We begin by diagnosing your business model, customer touchpoints, and revenue drivers before writing a single line of code."
+    title: "On-Time Project Delivery",
+    desc: "We use the latest tools, frameworks, and technologies to build secure, high-performing, and future-ready digital products on schedule."
   },
   {
     number: "04",
-    title: "Agile & Rapid Deployment",
-    desc: "Iterative two-week sprints ensure swift time-to-market without sacrificing architectural stability or comprehensive test coverage."
+    title: "Transparent Communication",
+    desc: "We maintain clear communication, transparent sprint processes, and regular milestone demos throughout every stage of your project."
   },
   {
     number: "05",
-    title: "End-to-End 360° Capability",
-    desc: "From initial UI/UX blueprints to full-stack code, cloud infrastructure, SEO dominance, and paid marketing, all under one roof."
+    title: "Scalable & Secure Technologies",
+    desc: "Every solution is carefully designed, developed, tested, and optimized to provide an excellent user experience and enterprise stability."
   },
   {
     number: "06",
     title: "Dedicated Post-Launch Support",
-    desc: "We provide SLA-backed maintenance, proactive server monitoring, security patching, and ongoing performance tuning."
+    desc: "We provide cost-effective IT services and SLA-backed maintenance that can easily scale and adapt as your business continues to grow."
   }
 ];
 
+// 10 Real Client Reviews directly matching https://www.retrotechdigital.com/
+export const TESTIMONIALS_DATA: TestimonialItem[] = [
+  {
+    id: "review-1",
+    name: "Priya Sharma",
+    role: "Marketing Head",
+    company: "UrbanNest Interiors",
+    country: "India",
+    flag: "🇮🇳",
+    service: "Digital Marketing",
+    rating: 5,
+    content: "Retrotech helped us grow our online presence with a perfectly executed social media strategy. Our brand visibility and inquiries have increased dramatically within months!",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-2",
+    name: "Michael Thompson",
+    role: "CEO",
+    company: "TechNova Solutions",
+    country: "USA",
+    flag: "🇺🇸",
+    service: "Web Development",
+    rating: 5,
+    content: "The team built a robust and responsive web application for our company. Their communication, technical expertise, and timely delivery were top-notch throughout.",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-3",
+    name: "Arjun Patel",
+    role: "Founder",
+    company: "FitAura Gym Chain",
+    country: "India",
+    flag: "🇮🇳",
+    service: "SEO Services",
+    rating: 5,
+    content: "Our local SEO rankings improved tremendously! Thanks to Retrotech, we now receive 3x more customer inquiries from Google every single week.",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-4",
+    name: "Sophie Martin",
+    role: "Product Manager",
+    company: "HealthBridge App",
+    country: "UK",
+    flag: "🇬🇧",
+    service: "App Development",
+    rating: 5,
+    content: "They developed a clean, user-friendly mobile app for our healthcare startup. The experience was seamless from UI/UX design to final App Store deployment.",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-5",
+    name: "Rohit Mehta",
+    role: "Director",
+    company: "Mehta Enterprises",
+    country: "India",
+    flag: "🇮🇳",
+    service: "Branding & PPC",
+    rating: 5,
+    content: "From branding to Google Ads — Retrotech handled everything with creativity and professionalism. Our online sales jumped by 45% in the first quarter.",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-6",
+    name: "Emily Johnson",
+    role: "Sales Head",
+    company: "Global Freight Co.",
+    country: "Canada",
+    flag: "🇨🇦",
+    service: "CRM Development",
+    rating: 5,
+    content: "They built a custom CRM for our logistics operations. It’s intuitive, fast, and integrates perfectly with our existing communication and ERP systems.",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-7",
+    name: "Neha Gupta",
+    role: "Owner",
+    company: "StyleAura Boutique",
+    country: "India",
+    flag: "🇮🇳",
+    service: "Web + Marketing",
+    rating: 5,
+    content: "They redesigned our website and ran digital marketing campaigns — the results were fantastic. My online orders doubled in just 2 months!",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-8",
+    name: "David Miller",
+    role: "Managing Director",
+    company: "EcoTrend Store",
+    country: "Australia",
+    flag: "🇦🇺",
+    service: "Ecommerce Development",
+    rating: 5,
+    content: "Excellent eCommerce development support. Smooth functionality, fast page speed, and an amazing user interface that converted our visitors into loyal customers.",
+    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-9",
+    name: "Karan Verma",
+    role: "Founder",
+    company: "Cafe Aroma",
+    country: "India",
+    flag: "🇮🇳",
+    service: "Social Media",
+    rating: 5,
+    content: "Their social media team is brilliant — engaging content, great visuals, and consistent growth in followers and customer footfall at our cafes.",
+    avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "review-10",
+    name: "Laura Rodriguez",
+    role: "Marketing Director",
+    company: "NovaVida Wellness",
+    country: "Spain",
+    flag: "🇪🇸",
+    service: "SEO + Web",
+    rating: 5,
+    content: "Their SEO optimization and responsive web design helped us attract international clients effortlessly. Highly recommended team for serious business growth.",
+    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80"
+  }
+];
+
+// FAQs directly matching https://www.retrotechdigital.com/
 export const FAQS_DATA: FAQItem[] = [
   {
-    question: "What IT and digital services does RetroTech Digital provide?",
-    answer: "RetroTech Digital delivers complete end-to-end IT and marketing solutions including bespoke web development, native and hybrid mobile applications, custom SaaS platforms, CRM and ERPNext integrations, UI/UX design, technical SEO, performance advertising, and round-the-clock managed cloud support."
+    question: "What IT services does your company provide?",
+    answer: "We provide website development, mobile app development, custom software solutions, UI/UX design, cloud services, digital marketing, SEO, and ongoing IT support."
   },
   {
-    question: "Do you build custom solutions or use off-the-shelf templates?",
-    answer: "Every digital flagship and application we craft is 100% custom-built to match your unique brand identity, technical requirements, and operational workflows. We avoid generic templates to guarantee optimal performance, security, and scalability."
+    question: "Do you provide customized solutions for businesses?",
+    answer: "Yes, we develop customized IT solutions based on your business requirements, target audience, workflow, budget, and long-term goals."
   },
   {
-    question: "How long does it typically take to complete an enterprise project?",
-    answer: "Timelines depend on scope and complexity. A bespoke corporate web application typically spans 4 to 8 weeks, while comprehensive mobile apps or enterprise SaaS platforms require 10 to 16 weeks, delivered through structured two-week agile milestones."
+    question: "How long does it take to complete an IT project?",
+    answer: "The project timeline depends on its scope, features, and complexity. After reviewing your requirements, our team provides a clear development plan and estimated delivery timeline."
   },
   {
-    question: "Do you provide dedicated maintenance and support after launch?",
-    answer: "Yes, we offer comprehensive SLA-backed post-launch support programs covering automated backups, continuous security updates, infrastructure monitoring, and feature iteration so your software scales effortlessly as your business grows."
+    question: "Do you provide support after the project is completed?",
+    answer: "Yes, we provide post-launch maintenance, technical support, security updates, performance monitoring, bug fixes, and future enhancements to keep your solution running smoothly."
+  }
+];
+
+// Articles directly matching https://www.retrotechdigital.com/
+export const BLOGS_DATA: BlogItem[] = [
+  {
+    id: "ppc-guide",
+    title: "PPC Advertising Guide: How to Improve Return on Ad Spend",
+    category: "Strategy & Performance",
+    date: "31 JAN 2026",
+    comments: "1 Comment",
+    summary: "Discover data-backed tactics to optimize paid search campaigns, reduce cost per acquisition, and maximize ROAS across Google and Meta advertising networks.",
+    image: "/assets/blog-ppc-guide.jpg"
   },
   {
-    question: "How do we kick off a collaboration with RetroTech Digital?",
-    answer: "Simply submit your brief through our consultation form or reach out via WhatsApp (+91-9910836538). Our lead technical consultants will schedule an introductory discovery session within 24 hours to review your requirements and outline a structured project roadmap."
+    id: "cloud-computing",
+    title: "Cloud Computing and Managed IT Services for Scalable Businesses",
+    category: "Cloud Infrastructure",
+    date: "31 JAN 2026",
+    comments: "1 Comment",
+    summary: "How modern businesses leverage hybrid cloud architectures, container orchestration, and proactive SRE monitoring to achieve 99.99% uptime.",
+    image: "/assets/blog-cloud-it.jpg"
   }
 ];
 

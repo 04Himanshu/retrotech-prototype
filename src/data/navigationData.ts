@@ -167,7 +167,7 @@ export const NAVIGATION_DATA = {
       {
         title: "IT Support",
         description: "Reliable technical support to resolve hardware, software, network, and system issues, ensuring your business operates without interruption.",
-        image: "/assets/enterprise.webp",
+        image: "/assets/industry-custom-hd.jpg",
         href: "#services"
       },
       {
